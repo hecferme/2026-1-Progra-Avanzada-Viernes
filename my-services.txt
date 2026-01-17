@@ -1,3 +1,5 @@
+hello world
+
 SKU;name;description;short description;regular price;sale price;categories;tags
 1;Financial Planning Consultation;Comprehensive financial planning to help clients manage assets, investments, and savings.;Financial planning services.;50000;45000;Financial;planning,investment,assets
 2;Tax Advisory Service;Expert advice on tax strategies and compliance.;Tax strategy consulting.;30000;27000;Financial;tax;compliance

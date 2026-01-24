@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 using NumberComparison;
 
@@ -187,5 +188,208 @@ namespace NumberComparison.Tests
         // String validation (like checking for letters) happens at the Program.Main level
         // using double.TryParse(), not within the Compare method itself.
         // The test class focuses on testing the Compare method's logic with valid numeric inputs.
+
+        // NumberComparerWithSlack tests
+        [Fact]
+        public void NumberComparerWithSlack_WithEqualStrings_ReturnsZero()
+        {
+            // Arrange
+            string firstNumber = "5.5";
+            string secondNumber = "5.5";
+            double slack = 0.1;
+
+            // Act
+            int result = _comparer.NumberComparerWithSlack(firstNumber, secondNumber, slack);
+
+            // Assert
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void NumberComparerWithSlack_WithinSlackTolerance_ReturnsZero()
+        {
+            // Arrange
+            string firstNumber = "5.0";
+            string secondNumber = "5.4";
+            double slack = 0.5;
+
+            // Act
+            int result = _comparer.NumberComparerWithSlack(firstNumber, secondNumber, slack);
+
+            // Assert
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void NumberComparerWithSlack_FirstLessThanSecondBeyondSlack_ReturnsNegativeOne()
+        {
+            // Arrange
+            string firstNumber = "3.0";
+            string secondNumber = "7.0";
+            double slack = 1.0;
+
+            // Act
+            int result = _comparer.NumberComparerWithSlack(firstNumber, secondNumber, slack);
+
+            // Assert
+            Assert.Equal(-1, result);
+        }
+
+        [Fact]
+        public void NumberComparerWithSlack_FirstGreaterThanSecondBeyondSlack_ReturnsOne()
+        {
+            // Arrange
+            string firstNumber = "10.0";
+            string secondNumber = "2.0";
+            double slack = 1.0;
+
+            // Act
+            int result = _comparer.NumberComparerWithSlack(firstNumber, secondNumber, slack);
+
+            // Assert
+            Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public void NumberComparerWithSlack_WithNegativeNumbers_ReturnsCorrectComparison()
+        {
+            // Arrange
+            string firstNumber = "-5.5";
+            string secondNumber = "-5.3";
+            double slack = 0.5;
+
+            // Act
+            int result = _comparer.NumberComparerWithSlack(firstNumber, secondNumber, slack);
+
+            // Assert
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void NumberComparerWithSlack_WithInvalidFirstNumber_ThrowsArgumentException()
+        {
+            // Arrange
+            string firstNumber = "abc";
+            string secondNumber = "5.5";
+            double slack = 0.1;
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _comparer.NumberComparerWithSlack(firstNumber, secondNumber, slack));
+        }
+
+        [Fact]
+        public void NumberComparerWithSlack_WithInvalidSecondNumber_ThrowsArgumentException()
+        {
+            // Arrange
+            string firstNumber = "5.5";
+            string secondNumber = "xyz";
+            double slack = 0.1;
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _comparer.NumberComparerWithSlack(firstNumber, secondNumber, slack));
+        }
+
+        [Fact]
+        public void NumberComparerWithSlack_WithLettersAndNumbers_ThrowsArgumentException()
+        {
+            // Arrange
+            string firstNumber = "5a5";
+            string secondNumber = "5.5";
+            double slack = 0.1;
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _comparer.NumberComparerWithSlack(firstNumber, secondNumber, slack));
+        }
+
+        [Fact]
+        public void NumberComparerWithSlack_WithZeroSlack_WorksLikeExactComparison()
+        {
+            // Arrange
+            string firstNumber = "5.0";
+            string secondNumber = "5.001";
+            double slack = 0;
+
+            // Act
+            int result = _comparer.NumberComparerWithSlack(firstNumber, secondNumber, slack);
+
+            // Assert
+            Assert.Equal(-1, result);
+        }
+
+        // NumberComparerWithoutSlack tests
+        [Fact]
+        public void NumberComparerWithoutSlack_WithEqualNumbers_ReturnsZero()
+        {
+            // Arrange
+            string firstNumber = "10.5";
+            string secondNumber = "10.5";
+
+            // Act
+            int result = _comparer.NumberComparerWithoutSlack(firstNumber, secondNumber);
+
+            // Assert
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void NumberComparerWithoutSlack_WithFirstLessThanSecond_ReturnsNegativeOne()
+        {
+            // Arrange
+            string firstNumber = "3.2";
+            string secondNumber = "7.8";
+
+            // Act
+            int result = _comparer.NumberComparerWithoutSlack(firstNumber, secondNumber);
+
+            // Assert
+            Assert.Equal(-1, result);
+        }
+
+        [Fact]
+        public void NumberComparerWithoutSlack_WithFirstGreaterThanSecond_ReturnsOne()
+        {
+            // Arrange
+            string firstNumber = "15.6";
+            string secondNumber = "8.9";
+
+            // Act
+            int result = _comparer.NumberComparerWithoutSlack(firstNumber, secondNumber);
+
+            // Assert
+            Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public void NumberComparerWithoutSlack_WithInvalidInput_ThrowsArgumentException()
+        {
+            // Arrange
+            string firstNumber = "letters";
+            string secondNumber = "5.5";
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _comparer.NumberComparerWithoutSlack(firstNumber, secondNumber));
+        }
+
+        [Fact]
+        public void NumberComparerWithoutSlack_WithBothLetters_ThrowsArgumentException()
+        {
+            // Arrange
+            string firstNumber = "abc";
+            string secondNumber = "xyz";
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _comparer.NumberComparerWithoutSlack(firstNumber, secondNumber));
+        }
+
+        [Fact]
+        public void NumberComparerWithoutSlack_WithMixedLettersAndNumbers_ThrowsArgumentException()
+        {
+            // Arrange
+            string firstNumber = "5a";
+            string secondNumber = "3b";
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _comparer.NumberComparerWithoutSlack(firstNumber, secondNumber));
+        }
     }
 }

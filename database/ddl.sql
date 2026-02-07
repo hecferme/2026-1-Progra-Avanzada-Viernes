@@ -38,10 +38,13 @@ CREATE TABLE dbo.Authors (
 GO
 
 -- Users
+-- max_concurrent_borrows: starts at 1 (default), decreases by penalty_weight when books are lost
+-- If value < 0, user is banned from borrowing
 CREATE TABLE dbo.Users (
     id INT IDENTITY(1,1) PRIMARY KEY,
     full_name NVARCHAR(300) NOT NULL,
-    email NVARCHAR(320) NULL
+    email NVARCHAR(320) NULL,
+    max_concurrent_borrows INT NOT NULL DEFAULT(1)
 );
 
 GO
@@ -53,6 +56,7 @@ CREATE TABLE dbo.BookCopies (
     book_id INT NOT NULL REFERENCES dbo.Books(id) ON DELETE CASCADE,
     barcode NVARCHAR(100) NULL UNIQUE,
     status TINYINT NOT NULL DEFAULT(2),
+    penalty_weight INT NOT NULL DEFAULT(0),
     CONSTRAINT CK_BookCopies_Status CHECK (status IN (0,1,2))
 );
 
@@ -161,6 +165,67 @@ BEGIN
     FROM dbo.BookCopies bc
     JOIN inserted i ON bc.id = i.book_copy_id
     WHERE i.status = 2;
+END;
+
+GO
+
+-- AFTER UPDATE trigger: Apply penalty when a borrow status changes to LOST (0)
+-- Deduct penalty_weight from user's max_concurrent_borrows
+-- If result < 0, user becomes banned (cannot borrow any more books)
+CREATE TRIGGER trg_Borrows_ApplyLostPenalty
+ON dbo.Borrows
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Only process rows that are transitioning TO LOST status (0)
+    -- and were previously ACTIVE (1)
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        JOIN deleted d ON i.id = d.id
+        WHERE i.status = 0 AND d.status = 1
+    )
+    BEGIN
+        -- Deduct penalty_weight from users who had books marked as LOST
+        UPDATE dbo.Users
+        SET max_concurrent_borrows = max_concurrent_borrows - bc.penalty_weight
+        WHERE id IN (
+            SELECT DISTINCT i.user_id
+            FROM inserted i
+            JOIN deleted d ON i.id = d.id
+            JOIN dbo.BookCopies bc ON i.book_copy_id = bc.id
+            WHERE i.status = 0 AND d.status = 1
+        );
+    END
+END;
+
+GO
+
+-- Scalar function to calculate available concurrent borrows for a user
+-- Returns the number of additional books a user can currently borrow
+-- Returns 0 if user is banned (max_concurrent_borrows < 0)
+CREATE FUNCTION dbo.fnGetAvailableConcurrentBorrows(@user_id INT)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @available INT;
+    
+    SELECT @available = CASE 
+                          WHEN u.max_concurrent_borrows < 0 THEN 0
+                          ELSE u.max_concurrent_borrows - ISNULL(active_count, 0)
+                        END
+    FROM dbo.Users u
+    LEFT JOIN (
+        SELECT user_id, COUNT(*) as active_count
+        FROM dbo.Borrows
+        WHERE status = 1 -- ACTIVE borrows only
+        GROUP BY user_id
+    ) active ON u.id = active.user_id
+    WHERE u.id = @user_id;
+    
+    RETURN ISNULL(@available, 0);
 END;
 
 GO

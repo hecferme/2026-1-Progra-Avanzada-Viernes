@@ -1,4 +1,7 @@
 [
-  { "id": 1, "full_name": "Alice Cooper", "email": "alice@example.com" },
-  { "id": 2, "full_name": "Bob Smith", "email": "bob@example.com" }
+  { "id": 1, "full_name": "Alice Cooper", "email": "alice@example.com", "max_concurrent_borrows": -1 },
+  { "id": 2, "full_name": "Bob Smith", "email": "bob@example.com", "max_concurrent_borrows": 1 },
+  { "id": 3, "full_name": "Carol White", "email": "carol@example.com", "max_concurrent_borrows": 1 },
+  { "id": 4, "full_name": "David Brown", "email": "david@example.com", "max_concurrent_borrows": 0 },
+  { "id": 5, "full_name": "Eve Martin", "email": "eve@example.com", "max_concurrent_borrows": -3 }
 ]

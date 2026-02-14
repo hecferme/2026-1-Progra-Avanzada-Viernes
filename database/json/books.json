@@ -1,0 +1,4 @@
+[
+  { "id": 1, "title": "1984", "isbn": "9780451524935", "published_date": "1949-06-08" },
+  { "id": 2, "title": "Brave New World", "isbn": "9780060850524", "published_date": "1932-08-18" }
+]

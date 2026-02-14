@@ -1,0 +1,15 @@
+ALTER ROLE db_datareader ADD MEMBER [user01];
+ALTER ROLE db_datawriter ADD MEMBER [user01];
+ALTER ROLE db_datareader ADD MEMBER [user02];
+ALTER ROLE db_datawriter ADD MEMBER [user02];
+
+
+GRANT CREATE TABLE TO [user01];
+GRANT CREATE TABLE TO [user02];
+
+ALTER ROLE db_ddladmin ADD MEMBER [user01];
+ALTER ROLE db_ddladmin ADD MEMBER [user02];
+
+
+ALTER AUTHORIZATION ON SCHEMA::[user02] TO [user02];
+ALTER AUTHORIZATION ON SCHEMA::[user01] TO [user01];

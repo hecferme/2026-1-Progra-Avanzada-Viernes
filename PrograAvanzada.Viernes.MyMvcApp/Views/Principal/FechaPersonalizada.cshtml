@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Fecha Personalizada";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="FechaPersonalizada" method="get">
+    <div class="form-group">
+        <label for="hoursOffset">Hours Offset (-24 to +24):</label>
+        <input type="number" id="hoursOffset" name="hoursOffset" class="form-control" min="-24" max="24" value="@ViewBag.Offset" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@if (ViewBag.Now != null)
+{
+    <hr />
+    <p>Current Date and Time: @ViewBag.Now.ToString("yyyy-MM-dd HH:mm:ss")</p>
+    <p>Customized Date and Time: @ViewBag.CustomizedDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+}

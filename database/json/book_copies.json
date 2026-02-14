@@ -1,0 +1,11 @@
+[
+  { "id": 1, "book_id": 1, "barcode": "BC1984-1", "status": 1, "penalty_weight": 2 },
+  { "id": 2, "book_id": 1, "barcode": "BC1984-2", "status": 0, "penalty_weight": 2 },
+  { "id": 3, "book_id": 2, "barcode": "BCBNW-1", "status": 2, "penalty_weight": 3 },
+  { "id": 4, "book_id": 2, "barcode": "BCBNW-2", "status": 2, "penalty_weight": 3 },
+  { "id": 5, "book_id": 3, "barcode": "BCGW-1", "status": 2, "penalty_weight": 1 },
+  { "id": 6, "book_id": 3, "barcode": "BCGW-2", "status": 1, "penalty_weight": 1 },
+  { "id": 7, "book_id": 4, "barcode": "BCHP-1", "status": 2, "penalty_weight": 4 },
+  { "id": 8, "book_id": 4, "barcode": "BCHP-2", "status": 0, "penalty_weight": 4 },
+  { "id": 9, "book_id": 5, "barcode": "BCMG-1", "status": 2, "penalty_weight": 2 }
+]

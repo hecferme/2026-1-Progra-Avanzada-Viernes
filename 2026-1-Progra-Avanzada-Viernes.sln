@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrograAvanzada.Viernes.MyLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrograAvanzada.Viernes.MyLibraryDbModel", "PrograAvanzada.Viernes.MyLibraryDbModel\PrograAvanzada.Viernes.MyLibraryDbModel.csproj", "{2A9DACC5-67C4-4D41-8923-80CA986AB4FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrograAvanzada.Viernes.MyLibraryJsonRepository", "PrograAvanzada.Viernes.MyLibraryJsonRepository\PrograAvanzada.Viernes.MyLibraryJsonRepository.csproj", "{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{2A9DACC5-67C4-4D41-8923-80CA986AB4FD}.Release|x64.Build.0 = Release|Any CPU
 		{2A9DACC5-67C4-4D41-8923-80CA986AB4FD}.Release|x86.ActiveCfg = Release|Any CPU
 		{2A9DACC5-67C4-4D41-8923-80CA986AB4FD}.Release|x86.Build.0 = Release|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Debug|x64.Build.0 = Debug|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Debug|x86.Build.0 = Debug|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Release|x64.ActiveCfg = Release|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Release|x64.Build.0 = Release|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Release|x86.ActiveCfg = Release|Any CPU
+		{C1234FB6-3079-89E2-8E2E-D768F4E8AA64}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

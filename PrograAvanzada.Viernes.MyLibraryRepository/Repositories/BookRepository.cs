@@ -23,9 +23,9 @@ public class BookRepository
             .SelectMany(x => x.Book.BookAuthors, (x, ba) => new { x.Book, x.BookCopy, BookAuthor = ba })
             .Select(x => new BookDto
             {
-                BookId = x.Book.Id,
-                BookTitle = x.Book.Title,
-                BookIsbn = x.Book.Isbn,
+                Id = x.Book.Id,
+                Title = x.Book.Title,
+                Isbn = x.Book.Isbn,
                 BookAuthorName = x.BookAuthor.Author.Name,
                 BookThemes = x.Book.Themes,
                 BookCopyId = x.BookCopy.Id,
@@ -39,7 +39,7 @@ public class BookRepository
     public async Task<List<BookDto>> GetByBookIdAsync(int bookId)
     {
         return await GetBaseQuery()
-            .Where(b => b.BookId == bookId)
+            .Where(b => b.Id == bookId)
             .ToListAsync();
     }
 
@@ -49,7 +49,7 @@ public class BookRepository
     public async Task<List<BookDto>> GetByApproximateTitleAsync(string title)
     {
         return await GetBaseQuery()
-            .Where(b => b.BookTitle.Contains(title))
+            .Where(b => b.Title.Contains(title))
             .ToListAsync();
     }
 
@@ -59,7 +59,7 @@ public class BookRepository
     public async Task<List<BookDto>> GetByExactIsbnAsync(string isbn)
     {
         return await GetBaseQuery()
-            .Where(b => b.BookIsbn == isbn)
+            .Where(b => b.Isbn == isbn)
             .ToListAsync();
     }
 
@@ -85,7 +85,7 @@ public class BookRepository
             .ToHashSet();
 
         return await GetBaseQuery()
-            .Where(b => booksWithTheme.Contains(b.BookId))
+            .Where(b => booksWithTheme.Contains(b.Id))
             .ToListAsync();
     }
 

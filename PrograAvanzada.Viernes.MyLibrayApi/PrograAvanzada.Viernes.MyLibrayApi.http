@@ -1,0 +1,6 @@
+@PrograAvanzada.Viernes.MyLibrayApi_HostAddress = http://localhost:5017
+
+GET {{PrograAvanzada.Viernes.MyLibrayApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -67,7 +67,7 @@ public class JsonDataStore
             Id = b.Id,
             Title = b.Title,
             Isbn = b.Isbn,
-            PublishedDate = DateTime.TryParse(b.PublishedDate, out var date) ? date : null
+            PublishedDate = DateTime.TryParse(b.PublishedDate, out var date) ? DateOnly.FromDateTime(date) : null
         }).ToList();
 
         // Load Users

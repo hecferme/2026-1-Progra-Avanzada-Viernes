@@ -35,9 +35,9 @@ public class BookRepository
                 {
                     result.Add(new BookDto
                     {
-                        BookId = book.Id,
-                        BookTitle = book.Title,
-                        BookIsbn = book.Isbn,
+                        Id = book.Id,
+                        Title = book.Title,
+                        Isbn = book.Isbn,
                         BookAuthorName = bookAuthor.Author?.Name ?? "",
                         BookThemes = themesString,
                         BookCopyId = bookCopy.Id,
@@ -56,7 +56,7 @@ public class BookRepository
     public Task<List<BookDto>> GetByBookIdAsync(int bookId)
     {
         var query = GetBaseQuery()
-            .Where(b => b.BookId == bookId)
+            .Where(b => b.Id == bookId)
             .ToList();
 
         return Task.FromResult(query);
@@ -68,7 +68,8 @@ public class BookRepository
     public Task<List<BookDto>> GetByApproximateTitleAsync(string title)
     {
         var query = GetBaseQuery()
-            .Where(b => b.BookTitle.Contains(title))
+            .Where
+            (b => b.Title.Contains(title))
             .ToList();
 
         return Task.FromResult(query);
@@ -80,7 +81,7 @@ public class BookRepository
     public Task<List<BookDto>> GetByExactIsbnAsync(string isbn)
     {
         var query = GetBaseQuery()
-            .Where(b => b.BookIsbn == isbn)
+            .Where(b => b.Isbn == isbn)
             .ToList();
 
         return Task.FromResult(query);
@@ -109,7 +110,7 @@ public class BookRepository
             .ToHashSet();
 
         var query = GetBaseQuery()
-            .Where(b => booksWithTheme.Contains(b.BookId))
+            .Where(b => booksWithTheme.Contains(b.Id))
             .ToList();
 
         return Task.FromResult(query);

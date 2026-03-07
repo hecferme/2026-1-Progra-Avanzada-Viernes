@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PrograAvanzada.Viernes.MyLibraryDbModel\PrograAvanzada.Viernes.MyLibraryDbModel.csproj" />
+    <ProjectReference Include="..\PrograAvanzada.Viernes.MyLibraryRepository\PrograAvanzada.Viernes.MyLibraryRepository.csproj" />
   </ItemGroup>
 
 </Project>

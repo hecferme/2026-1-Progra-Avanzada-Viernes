@@ -18,5 +18,6 @@ public class BookJsonRepositoryAdapter : IBookRepository
     public Task<List<BookDto>> GetByExactIsbnAsync(string isbn) => _repo.GetByExactIsbnAsync(isbn);
     public Task<List<BookDto>> GetByApproximateAuthorNameAsync(string authorName) => _repo.GetByApproximateAuthorNameAsync(authorName);
     public Task<List<BookDto>> GetByExactThemeAsync(string theme) => _repo.GetByExactThemeAsync(theme);
+    public Task<List<BookDto>> GetByThemeIdAsync(int themeId) => _repo.GetByThemeIdAsync(themeId);
     public Task<List<BookDto>> GetByBookCopyStatusAsync(byte status) => _repo.GetByBookCopyStatusAsync(status);
 }

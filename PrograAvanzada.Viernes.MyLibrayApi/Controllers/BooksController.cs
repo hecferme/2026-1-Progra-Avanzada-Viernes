@@ -98,6 +98,13 @@ public class BooksController : ControllerBase
         return Ok(results);
     }
 
+    [HttpGet("query/themeid/{themeId}")]
+    public async Task<ActionResult<List<BookDto>>> GetByThemeId(int themeId)
+    {
+        var results = await _queryRepository.GetByThemeIdAsync(themeId);
+        return Ok(results);
+    }
+
     [HttpGet("query/status/{status}")]
     public async Task<ActionResult<List<BookDto>>> GetByBookCopyStatus(byte status)
     {

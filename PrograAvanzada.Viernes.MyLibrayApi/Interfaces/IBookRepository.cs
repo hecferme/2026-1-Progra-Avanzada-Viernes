@@ -9,5 +9,6 @@ public interface IBookRepository
     Task<List<BookDto>> GetByExactIsbnAsync(string isbn);
     Task<List<BookDto>> GetByApproximateAuthorNameAsync(string authorName);
     Task<List<BookDto>> GetByExactThemeAsync(string theme);
+    Task<List<BookDto>> GetByThemeIdAsync(int themeId);
     Task<List<BookDto>> GetByBookCopyStatusAsync(byte status);
 }

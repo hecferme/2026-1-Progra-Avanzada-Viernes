@@ -5,6 +5,7 @@ public class BookDto
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string? Isbn { get; set; }
+    public DateOnly? PublishedDate { get; set; }
     public string BookAuthorName { get; set; } = string.Empty;
     public string BookThemes { get; set; } = string.Empty;
     public int BookCopyId { get; set; }

@@ -38,6 +38,7 @@ public class BookRepository
                         Id = book.Id,
                         Title = book.Title,
                         Isbn = book.Isbn,
+                        PublishedDate = book.PublishedDate,
                         BookAuthorName = bookAuthor.Author?.Name ?? "",
                         BookThemes = themesString,
                         BookCopyId = bookCopy.Id,
@@ -111,6 +112,25 @@ public class BookRepository
 
         var query = GetBaseQuery()
             .Where(b => booksWithTheme.Contains(b.Id))
+            .ToList();
+
+        return Task.FromResult(query);
+    }
+
+    /// <summary>
+    /// Query by theme id
+    /// </summary>
+    public Task<List<BookDto>> GetByThemeIdAsync(int themeId)
+    {
+        var booksWithTheme = _dataStore.Books
+            .Where(b => (b.BookThemes ?? new List<BookTheme>()).Any(bt => bt.Theme?.Id == themeId))
+            .Select(b => b.Id)
+            .ToHashSet();
+
+        var query = GetBaseQuery()
+            .Where(b => booksWithTheme.Contains(b.Id))
+            .GroupBy(b => b.Id)
+            .Select(g => g.First())
             .ToList();
 
         return Task.FromResult(query);

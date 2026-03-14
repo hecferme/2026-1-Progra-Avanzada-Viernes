@@ -30,6 +30,7 @@
                 <td>@theme.Id</td>
                 <td>@theme.Name</td>
                 <td>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#booksModal" onclick="loadBooks(@theme.Id)">Books</button>
                     <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" onclick="editTheme(@theme.Id, '@theme.Name')">Edit</button>
                     <form method="post" action="@Url.Action("Delete", "Themes")" style="display:inline;">
                         @Html.AntiForgeryToken()
@@ -93,11 +94,58 @@
     </div>
 </div>
 
+<!-- Books Modal -->
+<div class="modal fade" id="booksModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Books for Theme</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="booksTable">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>ISBN</th>
+                            <th>Published Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booksTableBody">
+                        <!-- Books will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
         function editTheme(id, name) {
             document.getElementById('editId').value = id;
             document.getElementById('editName').value = name;
+        }
+
+        async function loadBooks(themeId) {
+            const response = await fetch(`http://localhost:5017/api/books/query/themeid/${themeId}`);
+            const books = await response.json();
+            const tbody = document.getElementById('booksTableBody');
+            tbody.innerHTML = '';
+            books.forEach(book => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${book.id}</td>
+                    <td>${book.title}</td>
+                    <td>${book.isbn || ''}</td>
+                    <td>${book.publishedDate || ''}</td>
+                `;
+                tbody.appendChild(row);
+            });
         }
     </script>
 }

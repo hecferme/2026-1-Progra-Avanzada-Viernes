@@ -104,20 +104,20 @@ public partial class ViernesContext : DbContext
 
         modelBuilder.Entity<BookTheme>(entity =>
         {
-            entity.HasKey(e => new { e.BookId, e.ThemeId });
+            entity.HasKey(e => new { e.book_id, e.theme_id });
 
             entity.ToTable("BookThemes");
 
-            entity.Property(e => e.BookId).HasColumnName("book_id");
-            entity.Property(e => e.ThemeId).HasColumnName("theme_id");
+            entity.Property(e => e.book_id).HasColumnName("book_id");
+            entity.Property(e => e.theme_id).HasColumnName("theme_id");
 
             entity.HasOne(d => d.Book).WithMany(p => p.BookThemes)
-                .HasForeignKey(d => d.BookId)
+                .HasForeignKey(d => d.book_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__BookTheme__book___07C12930");
 
             entity.HasOne(d => d.Theme).WithMany(p => p.BookThemes)
-                .HasForeignKey(d => d.ThemeId)
+                .HasForeignKey(d => d.theme_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__BookTheme__theme__08B54D69");
         });

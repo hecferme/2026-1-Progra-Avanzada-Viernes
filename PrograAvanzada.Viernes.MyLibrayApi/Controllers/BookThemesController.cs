@@ -37,13 +37,13 @@ public class BookThemesController : ControllerBase
     public async Task<ActionResult<BookTheme>> Create(BookTheme item)
     {
         var created = await _repository.CreateAsync(item);
-        return CreatedAtAction(nameof(GetById), new { bookId = created.BookId, themeId = created.ThemeId }, created);
+        return CreatedAtAction(nameof(GetById), new { bookId = created.book_id, themeId = created.theme_id }, created);
     }
 
     [HttpPut("{bookId}/{themeId}")]
     public async Task<IActionResult> Update(int bookId, int themeId, BookTheme item)
     {
-        if (bookId != item.BookId || themeId != item.ThemeId)
+        if (bookId != item.book_id || themeId != item.theme_id)
         {
             return BadRequest();
         }

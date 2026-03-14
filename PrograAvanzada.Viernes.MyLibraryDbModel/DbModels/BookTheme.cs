@@ -5,9 +5,9 @@ namespace PrograAvanzada.Viernes.MyLibraryDbModel.DbModels;
 
 public partial class BookTheme
 {
-    public int BookId { get; set; }
+    public int book_id { get; set; }
 
-    public int ThemeId { get; set; }
+    public int theme_id { get; set; }
 
     public virtual Book Book { get; set; } = null!;
 

@@ -41,7 +41,7 @@ public class BookThemeCrudRepository
         return await _context.BookThemes
             .Include(bt => bt.Book)
             .Include(bt => bt.Theme)
-            .FirstOrDefaultAsync(bt => bt.BookId == bookId && bt.ThemeId == themeId);
+            .FirstOrDefaultAsync(bt => bt.book_id == bookId && bt.theme_id == themeId);
     }
 
     public async Task<List<BookTheme>> GetAllAsync()
@@ -56,7 +56,7 @@ public class BookThemeCrudRepository
     {
         return await _context.BookThemes
             .Include(bt => bt.Theme)
-            .Where(bt => bt.BookId == bookId)
+            .Where(bt => bt.book_id == bookId)
             .ToListAsync();
     }
 
@@ -64,7 +64,7 @@ public class BookThemeCrudRepository
     {
         return await _context.BookThemes
             .Include(bt => bt.Book)
-            .Where(bt => bt.ThemeId == themeId)
+            .Where(bt => bt.theme_id == themeId)
             .ToListAsync();
     }
 }

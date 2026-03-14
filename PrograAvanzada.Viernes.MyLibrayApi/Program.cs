@@ -10,7 +10,13 @@ using PrograAvanzada.Viernes.MyLibrayApi.Adapters;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Avoid $id/$values wrapping by preventing reference preservation.
+        // This also avoids serialization loops when there are bidirectional navigation properties.
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 
 var repositoryType = builder.Configuration.GetValue<string>("RepositoryType") ?? "json";
 

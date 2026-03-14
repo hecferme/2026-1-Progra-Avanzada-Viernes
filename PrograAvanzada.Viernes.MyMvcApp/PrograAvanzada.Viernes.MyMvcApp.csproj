@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PrograAvanzada.Viernes.MyLibraryDbModel\PrograAvanzada.Viernes.MyLibraryDbModel.csproj" />
+  </ItemGroup>
+
 </Project>

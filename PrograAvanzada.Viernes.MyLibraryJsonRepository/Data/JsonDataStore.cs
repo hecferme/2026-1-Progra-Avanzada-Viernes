@@ -57,7 +57,12 @@ public class JsonDataStore
 
         // Load Authors
         var authorsJson = File.ReadAllText(Path.Combine(_jsonPath, "authors.json"));
-        Authors = JsonSerializer.Deserialize<List<Author>>(authorsJson, options) ?? new List<Author>();
+        var authorsData = JsonSerializer.Deserialize<List<AuthorJsonModel>>(authorsJson, options) ?? new List<AuthorJsonModel>();
+        Authors = authorsData.Select(a => new Author
+        {
+            Id = a.Id,
+            Name = a.Name
+        }).ToList();
 
         // Load Books
         var booksJson = File.ReadAllText(Path.Combine(_jsonPath, "books.json"));
@@ -82,7 +87,12 @@ public class JsonDataStore
 
         // Load Themes
         var themesJson = File.ReadAllText(Path.Combine(_jsonPath, "themes.json"));
-        Themes = JsonSerializer.Deserialize<List<Theme>>(themesJson, options) ?? new List<Theme>();
+        var themesData = JsonSerializer.Deserialize<List<ThemeJsonModel>>(themesJson, options) ?? new List<ThemeJsonModel>();
+        Themes = themesData.Select(t => new Theme
+        {
+            Id = t.Id,
+            Name = t.Name
+        }).ToList();
 
         // Load BookCopies
         var bookCopiesJson = File.ReadAllText(Path.Combine(_jsonPath, "book_copies.json"));
@@ -110,14 +120,114 @@ public class JsonDataStore
 
         // Load BookAuthors
         var bookAuthorsJson = File.ReadAllText(Path.Combine(_jsonPath, "book_authors.json"));
-        BookAuthors = JsonSerializer.Deserialize<List<BookAuthor>>(bookAuthorsJson, options) ?? new List<BookAuthor>();
+        var bookAuthorsData = JsonSerializer.Deserialize<List<BookAuthorJsonModel>>(bookAuthorsJson, options) ?? new List<BookAuthorJsonModel>();
+        BookAuthors = bookAuthorsData.Select(ba => new BookAuthor
+        {
+            BookId = ba.BookId,
+            AuthorId = ba.AuthorId
+        }).ToList();
 
         // Load BookThemes
         var bookThemesJson = File.ReadAllText(Path.Combine(_jsonPath, "book_themes.json"));
-        BookThemes = JsonSerializer.Deserialize<List<BookTheme>>(bookThemesJson, options) ?? new List<BookTheme>();
+        var bookThemesData = JsonSerializer.Deserialize<List<BookThemeJsonModel>>(bookThemesJson, options) ?? new List<BookThemeJsonModel>();
+        BookThemes = bookThemesData.Select(bt => new BookTheme
+        {
+            book_id = bt.book_id,
+            theme_id = bt.theme_id
+        }).ToList();
 
         // Set up navigation properties
         SetUpNavigationProperties();
+    }
+
+    public void SaveData()
+    {
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            WriteIndented = true
+        };
+
+        // Save Authors
+        var authorsData = Authors.Select(a => new AuthorJsonModel
+        {
+            Id = a.Id,
+            Name = a.Name
+        }).ToList();
+        var authorsJson = JsonSerializer.Serialize(authorsData, options);
+        File.WriteAllText(Path.Combine(_jsonPath, "authors.json"), authorsJson);
+
+        // Save Books
+        var booksData = Books.Select(b => new BookJsonModel
+        {
+            Id = b.Id,
+            Title = b.Title,
+            Isbn = b.Isbn,
+            PublishedDate = b.PublishedDate?.ToString("yyyy-MM-dd")
+        }).ToList();
+        var booksJson = JsonSerializer.Serialize(booksData, options);
+        File.WriteAllText(Path.Combine(_jsonPath, "books.json"), booksJson);
+
+        // Save Users
+        var usersData = Users.Select(u => new UserJsonModel
+        {
+            Id = u.Id,
+            FullName = u.FullName,
+            Email = u.Email
+        }).ToList();
+        var usersJson = JsonSerializer.Serialize(usersData, options);
+        File.WriteAllText(Path.Combine(_jsonPath, "users.json"), usersJson);
+
+        // Save Themes
+        var themesData = Themes.Select(t => new ThemeJsonModel
+        {
+            Id = t.Id,
+            Name = t.Name
+        }).ToList();
+        var themesJson = JsonSerializer.Serialize(themesData, options);
+        File.WriteAllText(Path.Combine(_jsonPath, "themes.json"), themesJson);
+
+        // Save BookCopies
+        var bookCopiesData = BookCopies.Select(bc => new BookCopyJsonModel
+        {
+            Id = bc.Id,
+            BookId = bc.BookId,
+            Barcode = bc.Barcode,
+            Status = bc.Status
+        }).ToList();
+        var bookCopiesJson = JsonSerializer.Serialize(bookCopiesData, options);
+        File.WriteAllText(Path.Combine(_jsonPath, "book_copies.json"), bookCopiesJson);
+
+        // Save Borrows
+        var borrowsData = Borrows.Select(b => new BorrowJsonModel
+        {
+            Id = b.Id,
+            UserId = b.UserId,
+            BookCopyId = b.BookCopyId,
+            Status = b.Status,
+            BorrowDate = b.BorrowDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+            ReturnDate = b.ReturnDate?.ToString("yyyy-MM-ddTHH:mm:ss")
+        }).ToList();
+        var borrowsJson = JsonSerializer.Serialize(borrowsData, options);
+        File.WriteAllText(Path.Combine(_jsonPath, "borrows.json"), borrowsJson);
+
+        // Save BookAuthors
+        var bookAuthorsData = BookAuthors.Select(ba => new BookAuthorJsonModel
+        {
+            BookId = ba.BookId,
+            AuthorId = ba.AuthorId
+        }).ToList();
+        var bookAuthorsJson = JsonSerializer.Serialize(bookAuthorsData, options);
+        File.WriteAllText(Path.Combine(_jsonPath, "book_authors.json"), bookAuthorsJson);
+
+        // Save BookThemes
+        var bookThemesData = BookThemes.Select(bt => new BookThemeJsonModel
+        {
+            book_id = bt.book_id,
+            theme_id = bt.theme_id
+        }).ToList();
+        var bookThemesJson = JsonSerializer.Serialize(bookThemesData, options);
+        File.WriteAllText(Path.Combine(_jsonPath, "book_themes.json"), bookThemesJson);
     }
 
     private void SetUpNavigationProperties()
@@ -126,7 +236,7 @@ public class JsonDataStore
         foreach (var book in Books)
         {
             book.BookAuthors = BookAuthors.Where(ba => ba.BookId == book.Id).ToList();
-            book.BookThemes = BookThemes.Where(bt => bt.BookId == book.Id).ToList();
+            book.BookThemes = BookThemes.Where(bt => bt.book_id == book.Id).ToList();
             book.BookCopies = BookCopies.Where(bc => bc.BookId == book.Id).ToList();
         }
 
@@ -157,18 +267,12 @@ public class JsonDataStore
             bookAuthor.Book = Books.FirstOrDefault(b => b.Id == bookAuthor.BookId) ?? new Book { Id = bookAuthor.BookId, Title = "Unknown" };
         }
 
-        // Set up BookTheme -> Theme and Book
-        foreach (var bookTheme in BookThemes)
-        {
-            bookTheme.Theme = Themes.FirstOrDefault(t => t.Id == bookTheme.ThemeId) ?? new Theme { Id = bookTheme.ThemeId, Name = "Unknown" };
-            bookTheme.Book = Books.FirstOrDefault(b => b.Id == bookTheme.BookId) ?? new Book { Id = bookTheme.BookId, Title = "Unknown" };
-        }
-
-        // Set up Theme -> BookThemes
+        // Set up Theme -> BookThemes (forward ref only, skip back-refs to break cycle)
         foreach (var theme in Themes)
         {
-            theme.BookThemes = BookThemes.Where(bt => bt.ThemeId == theme.Id).ToList();
+            theme.BookThemes = BookThemes.Where(bt => bt.theme_id == theme.Id).ToList();
         }
+        // Note: BookTheme.Theme and BookTheme.Book remain null to prevent serialization cycles
     }
 
     // JSON model classes for deserialization
@@ -203,5 +307,31 @@ public class JsonDataStore
         public byte Status { get; set; }
         public string? BorrowDate { get; set; }
         public string? ReturnDate { get; set; }
+    }
+
+    private class AuthorJsonModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+
+    private class ThemeJsonModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+
+    private class BookAuthorJsonModel
+    {
+        public int Id { get; set; }
+        public int BookId { get; set; }
+        public int AuthorId { get; set; }
+    }
+
+    private class BookThemeJsonModel
+    {
+        public int Id { get; set; }
+        public int book_id { get; set; }
+        public int theme_id { get; set; }
     }
 }

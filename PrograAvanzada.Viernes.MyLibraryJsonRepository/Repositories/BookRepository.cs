@@ -24,7 +24,7 @@ public class BookRepository
             
             // Get themes for this book
             var themes = _dataStore.BookThemes
-                .Where(bt => bt.BookId == book.Id)
+                .Where(bt => bt.book_id == book.Id)
                 .Select(bt => bt.Theme?.Name ?? "")
                 .ToList();
             var themesString = string.Join(", ", themes);

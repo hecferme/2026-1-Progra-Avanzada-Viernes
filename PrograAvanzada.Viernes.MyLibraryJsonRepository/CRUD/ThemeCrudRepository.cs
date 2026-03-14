@@ -48,7 +48,11 @@ public class ThemeCrudRepository
         
         if (theme != null)
         {
-            theme.BookThemes = _dataStore.BookThemes.Where(bt => bt.ThemeId == id).ToList();
+            // Load BookThemes forward ref, but prevent cycle
+            theme.BookThemes = _dataStore.BookThemes
+                .Where(bt => bt.theme_id == id)
+                .Select(bt => { bt.Book = null; bt.Theme = null; return bt; })
+                .ToList();
         }
         
         return Task.FromResult(theme);
@@ -57,6 +61,14 @@ public class ThemeCrudRepository
     public Task<List<Theme>> GetAllAsync()
     {
         var themes = _dataStore.Themes.ToList();
+        foreach (var theme in themes)
+        {
+            // Load BookThemes forward ref, but prevent cycle
+            theme.BookThemes = _dataStore.BookThemes
+                .Where(bt => bt.theme_id == theme.Id)
+                .Select(bt => { bt.Book = null; bt.Theme = null; return bt; })
+                .ToList();
+        }
         return Task.FromResult(themes);
     }
 }

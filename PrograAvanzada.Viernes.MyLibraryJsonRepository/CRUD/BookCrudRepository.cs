@@ -51,9 +51,12 @@ public class BookCrudRepository
         
         if (book != null)
         {
-            // Load related data
+            // Load related data, prevent cycles
             book.BookAuthors = _dataStore.BookAuthors.Where(ba => ba.BookId == id).ToList();
-            book.BookThemes = _dataStore.BookThemes.Where(bt => bt.BookId == id).ToList();
+            book.BookThemes = _dataStore.BookThemes
+                .Where(bt => bt.book_id == id)
+                .Select(bt => { bt.Book = null; bt.Theme = null; return bt; })
+                .ToList();
             book.BookCopies = _dataStore.BookCopies.Where(bc => bc.BookId == id).ToList();
         }
         
@@ -67,7 +70,10 @@ public class BookCrudRepository
         foreach (var book in books)
         {
             book.BookAuthors = _dataStore.BookAuthors.Where(ba => ba.BookId == book.Id).ToList();
-            book.BookThemes = _dataStore.BookThemes.Where(bt => bt.BookId == book.Id).ToList();
+            book.BookThemes = _dataStore.BookThemes
+                .Where(bt => bt.book_id == book.Id)
+                .Select(bt => { bt.Book = null; bt.Theme = null; return bt; })
+                .ToList();
             book.BookCopies = _dataStore.BookCopies.Where(bc => bc.BookId == book.Id).ToList();
         }
         
